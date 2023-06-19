@@ -31,4 +31,5 @@ RUN pip install pipenv
 COPY ./emprestimo $DockerHOME
 RUN pipenv install
 EXPOSE 8000
+CMD pipenv run python manage.py collectstatic --noinput
 CMD pipenv run python manage.py runserver
