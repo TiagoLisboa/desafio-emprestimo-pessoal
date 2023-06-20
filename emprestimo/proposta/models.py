@@ -10,3 +10,6 @@ class ProposalField(models.Model):
     ])
     is_required = models.BooleanField()
 
+class Proposal(models.Model):
+    fields = models.JSONField()
+
