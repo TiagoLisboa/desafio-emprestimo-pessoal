@@ -19,7 +19,7 @@ WORKDIR $DockerHOME
 
 RUN mkdir -v $DockerHOME/.venv
 
-COPY --from=builder /usr/src/.venv/ $DockerHOME/.venv/
+COPY --from=builder /usr/src/.venv/ $DockerHOME/../.venv/
 
 RUN mkdir -p $DockerHOME
 
@@ -30,5 +30,5 @@ COPY ./emprestimo $DockerHOME
 
 EXPOSE 8000
 
-CMD ['./.venv/bin/python', 'manage.py', 'collectstatic', '--noinput']
-CMD ['./.venv/bin/python', 'manage.py', 'runserver']
+CMD ['../.venv/bin/python', 'manage.py', 'collectstatic', '--noinput']
+CMD ['../.venv/bin/python', 'manage.py', 'runserver']
