@@ -3,18 +3,25 @@ from django.db import models
 # Create your models here.
 class ProposalField(models.Model):
     name = models.CharField(max_length=200)
-    field_type = models.IntegerField(choices=[
-        (0, 'string'),
-        (1, 'numeric'),
-        (2, 'boolean'),
-    ])
+    TYPE_STRING=0
+    TYPE_FLOAT=1
+    TYPE_INTEGER=2
+    TYPE_BOOLEAN=3
+    TYPE_CHOICES = [
+        (TYPE_STRING, 'string'),
+        (TYPE_FLOAT, 'numeric'),
+        (TYPE_INTEGER, 'integer'),
+        (TYPE_BOOLEAN, 'boolean'),
+    ]
+    field_type = models.IntegerField(choices=TYPE_CHOICES)
     is_required = models.BooleanField()
 
 class Proposal(models.Model):
     fields = models.JSONField()
-    status = models.CharField(choices=[
+    STATUS_CHOICES = [
         ('Não Avaliada', 'Não Avaliada'),
         ('Aprovada', 'Aprovada'),
         ('Reprovada', 'Reprovada'),
-    ], default='Não Avaliada')
+    ]
+    status = models.CharField(choices=STATUS_CHOICES, default='Não Avaliada')
 
