@@ -12,4 +12,9 @@ class ProposalField(models.Model):
 
 class Proposal(models.Model):
     fields = models.JSONField()
+    status = models.CharField(choices=[
+        ('Não Avaliada', 'Não Avaliada'),
+        ('Aprovada', 'Aprovada'),
+        ('Reprovada', 'Reprovada'),
+    ], default='Não Avaliada')
 
