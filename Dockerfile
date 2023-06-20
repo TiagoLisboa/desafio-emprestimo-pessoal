@@ -4,11 +4,12 @@ RUN pip install --user pipenv
 
 ENV PIPENV_VENV_IN_PROJECT=1
 
-ADD emprestimo/Pipfile.lock emprestimo/Pipfile /usr/src/
+ADD Pipfile.lock Pipfile /usr/src/
 
 WORKDIR /usr/src
 
 RUN /root/.local/bin/pipenv sync
+
 
 FROM python:3.8 AS runtime
 
@@ -25,11 +26,9 @@ RUN mkdir -p $DockerHOME
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN pip install --upgrade pip
-RUN pip install pipenv
-
 COPY ./emprestimo $DockerHOME
-RUN pipenv install
+
 EXPOSE 8000
-CMD pipenv run python manage.py collectstatic --noinput
-CMD pipenv run python manage.py runserver
+
+CMD ['./.venv/bin/python', 'manage.py', 'collectstatic', '--noinput']
+CMD ['./.venv/bin/python', 'manage.py', 'runserver']

@@ -17,6 +17,9 @@ services:
 
     restart: "on-failure"
 
+    networks:
+      - djangonetwork
+
   web:
     build: .
 
@@ -41,9 +44,15 @@ services:
     depends_on:
       - db
 
+    links:
+      - db:db
+
+    networks:
+      - djangonetwork
+
 
   db:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
 
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -54,8 +63,12 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - PGPORT=${DB_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
 
     restart: "on-failure"
+
+    networks:
+      - djangonetwork
 
 
   rabbitmq:
@@ -76,8 +89,15 @@ services:
     depends_on:
       - web
 
+    networks:
+      - djangonetwork
+
 volumes:
   postgres_data:
   static_volume:
   rabbitmq:
   rabbitmq_logs:
+
+networks:
+  djangonetwork:
+    driver: bridge
