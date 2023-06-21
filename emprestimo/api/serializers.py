@@ -1,7 +1,11 @@
 from .models import Proposal, ProposalField
 from rest_framework import serializers
 
-class ProposalSerializer(serializers.Serializer):
+class ProposalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Proposal
+        fields = ['id', 'status']
+
     def __init__(self, *args, **kwargs):
         super(ProposalSerializer, self).__init__(*args, **kwargs)
 

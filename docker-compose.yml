@@ -23,9 +23,9 @@ services:
   web:
     build: .
 
-    command: sh -c "../.venv/bin/python manage.py makemigrations &&
-                    ../.venv/bin/python manage.py migrate &&
-                    ../.venv/bin/python -m  gunicorn emprestimo.wsgi:application --bind 0.0.0.0:${APP_PORT} --reload"
+    command: sh -c "python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python -m  gunicorn emprestimo.wsgi:application --bind 0.0.0.0:${APP_PORT} --reload"
 
     volumes:
       - ./emprestimo:/home/app/microservice
@@ -50,6 +50,27 @@ services:
     networks:
       - djangonetwork
 
+  celery:
+    restart: always
+
+    build:
+      context: .
+
+    command: sh -c "celery -A emprestimo worker -l info"
+
+    volumes:
+      - ./emprestimo:/home/app/microservice
+
+    env_file:
+      - .env
+
+    depends_on:
+      - db
+      - rabbitmq
+      - web
+
+    networks:
+      - djangonetwork
 
   db:
     image: postgres:12-alpine
