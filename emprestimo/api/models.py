@@ -25,3 +25,15 @@ class Proposal(models.Model):
     ]
     status = models.CharField(choices=STATUS_CHOICES, default='Não Avaliada')
 
+    def __getattr__(self, name):
+        try:
+            return self.fields[name]
+        except KeyError:
+            try:
+                return super(Proposal, self).__getattr__(name)
+            except AttributeError:
+                raise AttributeError(
+                        "object %s has no attribute '%s'" % (type(self).__name__, name)
+                    )
+
+
