@@ -27,3 +27,9 @@ class ProposalSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Proposal.objects.create(fields=validated_data)
 
+
+class ProposalFieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProposalField
+        fields = '__all__'
+

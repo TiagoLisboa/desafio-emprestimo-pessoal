@@ -1,4 +1,5 @@
-from .serializers import ProposalSerializer
+from .serializers import ProposalSerializer, ProposalFieldSerializer
+from .models import ProposalField
 from .tasks import evaluate_proposal
 
 from rest_framework import mixins, generics
@@ -11,3 +12,8 @@ class CreateProposal(mixins.CreateModelMixin,
         response = self.create(request, *args, **kwargs)
         evaluate_proposal.delay(response.data['id'])
         return response
+
+
+class ProposalField(generics.ListAPIView):
+    queryset = ProposalField.objects.all()
+    serializer_class = ProposalFieldSerializer
