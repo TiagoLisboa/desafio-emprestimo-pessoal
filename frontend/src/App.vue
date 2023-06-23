@@ -1,47 +1,32 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+    import axios from 'axios'
+    import { ref } from 'vue'
+
+    const proposalFields = ref([]);
+    const fieldRefs = ref([])
+
+
+    const headers = {
+        'Sec-Fetch-Site': 'same-origin'
+    };
+    axios
+        .get('http://localhost:1339/api/api/proposal_fields', headers)
+        .then(response => {proposalFields.value = response.data});
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <main>
+        <div v-for="field in proposalFields" ref="fieldRefs">
+            <label :for="field.id">
+                {{ field.name }}
+            </label>
+            <input v-if="field.field_type == 'string'" type="text" :name="field.name" :id="field.id" />
+            <input v-if="field.field_type == 'numeric'" type="number" :name="field.name" :id="field.id" />
+            <input v-if="field.field_type == 'integer'" type="number" step="1" :name="field.name" :id="field.id" />
+            <input v-if="field.field_type == 'boolean'" type="checkbox" :name="field.name" :id="field.id" />
+        </div>
+    </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+<style scoped></style>
