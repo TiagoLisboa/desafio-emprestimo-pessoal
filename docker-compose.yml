@@ -5,15 +5,14 @@ services:
     build: ./nginx
 
     ports:
-      - 1339:80
+      - 1339:1339
 
     volumes:
-      - static_volume:/home/app/microservice/static
+      - ./static_volume:/home/app/microservice/static
 
     depends_on:
-      - web
-    links:
-      - web
+      - api
+      - app
 
     restart: "on-failure"
 
@@ -25,6 +24,7 @@ services:
 
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
+                    python manage.py collectstatic --noinput &&
                     python -m  gunicorn emprestimo.wsgi:application --bind 0.0.0.0:${APP_PORT} --reload"
 
     volumes:
@@ -50,11 +50,34 @@ services:
     networks:
       - djangonetwork
 
+  app:
+    restart: always
+
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: app
+
+    image: app_image
+
+    depends_on:
+      - api
+
+    expose:
+      - "81"
+
+    volumes:
+      - ./frontend/nginx:/etc/nginx/conf.d
+
+    networks:
+      - djangonetwork
+
   celery:
     restart: always
 
     build:
-      context: .
+      context: ./emprestimo
 
     command: sh -c "celery -A emprestimo worker -l info"
 
@@ -67,7 +90,7 @@ services:
     depends_on:
       - db
       - rabbitmq
-      - web
+      - api
 
     networks:
       - djangonetwork
@@ -91,7 +114,6 @@ services:
     networks:
       - djangonetwork
 
-
   rabbitmq:
     image:
       rabbitmq:3-management-alpine
@@ -108,7 +130,7 @@ services:
       - 15672:15672
 
     depends_on:
-      - web
+      - api
 
     networks:
       - djangonetwork

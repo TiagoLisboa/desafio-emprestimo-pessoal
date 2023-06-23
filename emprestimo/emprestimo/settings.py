@@ -143,7 +143,7 @@ DJANGO_SUPERUSER_PASSWORD = env('DJANGO_SU_PASSWORD')
 DJANGO_SUPERUSER_EMAIL = env('DJANGO_SU_EMAIL')
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:1339']
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'api']
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:1339',
 ]
