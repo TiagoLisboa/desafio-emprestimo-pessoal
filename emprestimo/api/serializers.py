@@ -29,7 +29,12 @@ class ProposalSerializer(serializers.ModelSerializer):
 
 
 class ProposalFieldSerializer(serializers.ModelSerializer):
+    field_type = serializers.SerializerMethodField()
+
     class Meta:
         model = ProposalField
         fields = '__all__'
+
+    def get_field_type(self, obj):
+        return obj.get_field_type_display()
 
