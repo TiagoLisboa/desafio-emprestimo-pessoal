@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="js">
     import axios from 'axios';
     import { ref } from 'vue';
 
@@ -28,7 +28,7 @@
             }
             proposalFields.value = response.data;
 
-            console.log(defaultAnswers)
+            defaultAnswers = Object.fromEntries(response.data.map(field => [field.name, getDefaultValue(field.field_type)]))
             answers.value = defaultAnswers
         });
 
