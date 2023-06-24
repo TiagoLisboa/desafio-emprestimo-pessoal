@@ -6,15 +6,19 @@ Para executar esse projeto, primeiro garanta que tenha instalado o [Docker](http
 > docker compose up
 ```
 
-Assim o docker compose ira garantir a subida de todos os containers necessários e executará todos os scripts de instalação.
-Quando o comando finalizar, acesso no seu navegador a url:
+Assim o docker compose ira garantir a subida de todos os containers necessários e executará todos os scripts de instalação.Para acessar o admin do django, acesse a url:
+```
+http://localhost:1339/api/admin
+```
+Já devera existir um usuário criado para admin, suas credenciais são:
 
+```
+usuário: test
+senha: mypass123
+```
+Também poderá acessar o seguinte endereço:
 ```
 http://localhost:1339
 ```
 Ela te dará acesso a o formulário para cadastrar propostas.
 
-Para acessar o admin do django, acesse a url:
-```
-http://localhost:1339/api/admin
-```
