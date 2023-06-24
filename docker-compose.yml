@@ -22,17 +22,18 @@ services:
   api:
     build: ./emprestimo
 
+    env_file:
+      - .env
+
     command: sh -c "python manage.py makemigrations &&
                     python manage.py migrate &&
+                    python manage.py createsuperuser --noinput --username ${DJANGO_SUPERUSER_USERNAME} --email ${DJANGO_SUPERUSER_EMAIL} &&
                     python manage.py collectstatic --noinput &&
                     python -m  gunicorn emprestimo.wsgi:application --bind 0.0.0.0:${APP_PORT} --reload"
 
     volumes:
       - ./emprestimo:/home/app/microservice
       - ./static_volume:/home/app/microservice/static
-
-    env_file:
-      - .env
 
     image: microservice_app
 
